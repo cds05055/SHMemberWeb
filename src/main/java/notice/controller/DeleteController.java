@@ -1,4 +1,4 @@
-package member.controller;
+package notice.controller;
 
 import java.io.IOException;
 
@@ -9,20 +9,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import member.model.service.MemberService;
-import member.model.vo.Member;
+import notice.model.service.NoticeService;
 
 /**
- * Servlet implementation class MyInfoController
+ * Servlet implementation class DeleteController
  */
-@WebServlet("/member/myInfo.do")
-public class MyInfoController extends HttpServlet {
+@WebServlet(name = "NoticeDeleteController", urlPatterns = { "/notice/delete.do" })
+public class DeleteController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MyInfoController() {
+    public DeleteController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,18 +30,18 @@ public class MyInfoController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 페이지 이동 2가지 방법
-		// 1. with Data (DataBase에서 가져옴)
-		// 쿼리문 : SELECT * FROM MEMBER_TBL WHERE MEMBER_ID = ?
-		MemberService service = new MemberService();
-		String memberId = request.getParameter("member-id");
-		Member member = service.selectOneById(memberId);
-		request.setAttribute("member", member);
-		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/member/myInfo.jsp");
-		view.forward(request, response);
-		
-		// 2. without Data(단순 페이지 이동)
-//		response.sendRedirect("");
+		NoticeService service = new NoticeService();
+		int noticeNo = Integer.parseInt(request.getParameter("noticeNo"));
+		int result = service.deleteNoticeByNo(noticeNo);
+		if(result > 0) {
+			// 성공
+			response.sendRedirect("/notice/list.do");
+		} else {
+			// 실패
+			request.setAttribute("msg", "공지사항 삭제가 완료되지 않았습니다.");
+			RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/common/serviceFailed.jsp");
+			view.forward(request, response);
+		}
 	}
 
 	/**

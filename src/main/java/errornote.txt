@@ -1,0 +1,5 @@
+java.sql.SQLIntegrityConstraintViolationException: ORA-01400: cannot insert NULL into ("MEMBERWEB"."NOTICE_TBL"."NOTICE_CONTENT")
+jsp의 name값 오타
+
+java.sql.SQLSyntaxErrorException: ORA-00984: column not allowed here
+쿼리문 오류 - DAO에서 쿼리문 수정
